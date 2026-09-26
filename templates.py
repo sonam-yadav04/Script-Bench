@@ -1,21 +1,10 @@
-"""
-Script Bench - Templates & Rules Engine
-Provides structured prompt templates and word-budget rules for generating
-short-form video scripts (30s / 45s / 60s).
-"""
 
-# ──────────────────────────────────────────────
-# WORD BUDGET per duration (spoken at ~130 wpm)
-# ──────────────────────────────────────────────
 WORD_BUDGETS = {
     30: {"hook": 15, "body": 40, "cta": 10},
     45: {"hook": 20, "body": 65, "cta": 12},
     60: {"hook": 25, "body": 90, "cta": 15},
 }
 
-# ──────────────────────────────────────────────
-# NICHE → TONE / STYLE HINTS
-# ──────────────────────────────────────────────
 NICHE_STYLES = {
     "fitness":      "energetic, motivational, use power verbs",
     "finance":      "authoritative yet approachable, data-driven",
@@ -33,9 +22,6 @@ NICHE_STYLES = {
 
 DEFAULT_STYLE = "engaging, conversational, direct"
 
-# ──────────────────────────────────────────────
-# HOOK ARCHETYPES
-# ──────────────────────────────────────────────
 HOOK_ARCHETYPES = [
     "Bold Claim  – State a surprising fact or bold opinion instantly",
     "Pain Point  – Name a struggle your audience knows deeply",
@@ -44,9 +30,6 @@ HOOK_ARCHETYPES = [
     "Story Hook  – Drop mid-action into a micro-story (no slow intro)",
 ]
 
-# ──────────────────────────────────────────────
-# CTA FORMULAS
-# ──────────────────────────────────────────────
 CTA_FORMULAS = [
     "Follow for more [niche] tips",
     "Save this so you don not forget",
@@ -55,9 +38,6 @@ CTA_FORMULAS = [
     "Link in bio for the full breakdown",
 ]
 
-# ──────────────────────────────────────────────
-# MASTER SYSTEM PROMPT
-# ──────────────────────────────────────────────
 SYSTEM_PROMPT = """You are ScriptBench, an expert short-form video scriptwriter.
 You write punchy, high-retention scripts for TikTok, Instagram Reels, and YouTube Shorts.
 
@@ -70,9 +50,7 @@ Core rules you NEVER break:
 6. Match tone to the niche perfectly.
 7. Output ONLY valid JSON — no markdown fences, no extra keys."""
 
-# ──────────────────────────────────────────────
-# BUILD USER PROMPT
-# ──────────────────────────────────────────────
+
 def build_prompt(niche: str, topic: str, target_seconds: int) -> str:
     budget = WORD_BUDGETS.get(target_seconds, WORD_BUDGETS[60])
     style  = NICHE_STYLES.get(niche.lower().strip(), DEFAULT_STYLE)
