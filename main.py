@@ -1,10 +1,6 @@
-"""
-Script Bench - FastAPI Backend
-Generates short-form video scripts via LLM (Anthropic / OpenAI / Groq).
-"""
+
 
 from __future__ import annotations
-
 import json
 import os
 from pathlib import Path
@@ -20,7 +16,7 @@ from pydantic import BaseModel, Field, field_validator
 
 from templates import SYSTEM_PROMPT, build_prompt
 
-# ── Load environment ───────────────────────────────────────────────────────────
+# ── Load environment ────
 load_dotenv()
 
 LLM_PROVIDER  = os.getenv("LLM_PROVIDER", "anthropic").lower()
