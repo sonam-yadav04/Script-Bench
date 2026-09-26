@@ -1,31 +1,41 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Script Bench — AI Video Script Generator</title>
-  <meta name="description" content="Turn any idea into a punchy short-form video script in seconds. Enter your niche, topic, and duration — get a pro-ready hook, body, and CTA." />
+  <meta name="description"
+    content="Turn any idea into a punchy short-form video script in seconds. Enter your niche, topic, and duration — get a pro-ready hook, body, and CTA." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet" />
   <style>
     /* ─── Reset & Base ─────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
-      --bg:        #0a0a0f;
-      --surface:   #13131a;
-      --surface2:  #1c1c27;
-      --border:    rgba(255,255,255,0.08);
-      --border2:   rgba(255,255,255,0.14);
-      --accent:    #7c5cfc;
-      --accent2:   #c77dff;
-      --green:     #3dffa0;
-      --red:       #ff5c7a;
-      --text:      #f0efff;
-      --muted:     #7a7a9a;
-      --radius:    14px;
+      --bg: #0a0a0f;
+      --surface: #13131a;
+      --surface2: #1c1c27;
+      --border: rgba(255, 255, 255, 0.08);
+      --border2: rgba(255, 255, 255, 0.14);
+      --accent: #7c5cfc;
+      --accent2: #c77dff;
+      --green: #3dffa0;
+      --red: #ff5c7a;
+      --text: #f0efff;
+      --muted: #7a7a9a;
+      --radius: 14px;
       --radius-lg: 22px;
-      --shadow:    0 8px 40px rgba(0,0,0,0.5);
+      --shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
     }
 
     body {
@@ -39,10 +49,12 @@
     /* ─── Animated background ──────────────────────────────────── */
     body::before {
       content: '';
-      position: fixed; inset: 0; z-index: -1;
+      position: fixed;
+      inset: 0;
+      z-index: -1;
       background:
-        radial-gradient(ellipse 60% 40% at 20% 10%, rgba(124,92,252,0.15) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 35% at 80% 80%, rgba(199,125,255,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 20% 10%, rgba(124, 92, 252, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 35% at 80% 80%, rgba(199, 125, 255, 0.10) 0%, transparent 60%),
         var(--bg);
     }
 
@@ -63,7 +75,7 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: linear-gradient(135deg, var(--surface2), rgba(124,92,252,0.2));
+      background: linear-gradient(135deg, var(--surface2), rgba(124, 92, 252, 0.2));
       border: 1px solid var(--border2);
       border-radius: 40px;
       padding: 8px 20px 8px 14px;
@@ -76,7 +88,8 @@
     }
 
     .logo .dot {
-      width: 8px; height: 8px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: var(--green);
       box-shadow: 0 0 8px var(--green);
@@ -84,8 +97,17 @@
     }
 
     @keyframes pulse {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50%      { opacity: 0.5; transform: scale(0.8); }
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(0.8);
+      }
     }
 
     h1 {
@@ -133,7 +155,9 @@
       gap: 8px;
     }
 
-    .form-group.full { grid-column: 1 / -1; }
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
 
     label {
       font-size: 12px;
@@ -143,7 +167,9 @@
       color: var(--muted);
     }
 
-    input, select, textarea {
+    input,
+    select,
+    textarea {
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: var(--radius);
@@ -156,16 +182,27 @@
       width: 100%;
     }
 
-    input::placeholder, textarea::placeholder { color: var(--muted); }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(124,92,252,0.18);
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--muted);
     }
 
-    select option { background: var(--surface2); }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.18);
+    }
 
-    textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+    select option {
+      background: var(--surface2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+      line-height: 1.6;
+    }
 
     /* ─── Duration pills ───────────────────────────────────────── */
     .pill-group {
@@ -188,13 +225,16 @@
       user-select: none;
     }
 
-    .pill:hover { border-color: var(--accent); color: var(--text); }
+    .pill:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
 
     .pill.active {
       border-color: var(--accent);
-      background: rgba(124,92,252,0.18);
+      background: rgba(124, 92, 252, 0.18);
       color: var(--accent2);
-      box-shadow: 0 0 12px rgba(124,92,252,0.2);
+      box-shadow: 0 0 12px rgba(124, 92, 252, 0.2);
     }
 
     /* ─── Generate button ──────────────────────────────────────── */
@@ -212,26 +252,33 @@
       cursor: pointer;
       letter-spacing: 0.3px;
       transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 24px rgba(124,92,252,0.4);
+      box-shadow: 0 4px 24px rgba(124, 92, 252, 0.4);
       position: relative;
       overflow: hidden;
     }
 
     .btn-generate::before {
       content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent);
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent);
     }
 
     .btn-generate:hover:not(:disabled) {
       opacity: 0.92;
       transform: translateY(-1px);
-      box-shadow: 0 8px 32px rgba(124,92,252,0.5);
+      box-shadow: 0 8px 32px rgba(124, 92, 252, 0.5);
     }
 
-    .btn-generate:active:not(:disabled) { transform: translateY(0); }
+    .btn-generate:active:not(:disabled) {
+      transform: translateY(0);
+    }
 
-    .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-generate:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
 
     .btn-generate .btn-inner {
       display: flex;
@@ -242,21 +289,26 @@
 
     /* ─── Spinner ──────────────────────────────────────────────── */
     .spinner {
-      width: 18px; height: 18px;
-      border: 2.5px solid rgba(255,255,255,0.3);
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255, 255, 255, 0.3);
       border-top-color: #fff;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       display: none;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     /* ─── Error banner ─────────────────────────────────────────── */
     .error-banner {
       display: none;
-      background: rgba(255,92,122,0.1);
-      border: 1px solid rgba(255,92,122,0.3);
+      background: rgba(255, 92, 122, 0.1);
+      border: 1px solid rgba(255, 92, 122, 0.3);
       border-radius: var(--radius);
       padding: 14px 18px;
       color: var(--red);
@@ -300,9 +352,9 @@
       font-weight: 700;
       padding: 3px 10px;
       border-radius: 20px;
-      background: rgba(61,255,160,0.12);
+      background: rgba(61, 255, 160, 0.12);
       color: var(--green);
-      border: 1px solid rgba(61,255,160,0.25);
+      border: 1px solid rgba(61, 255, 160, 0.25);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -319,7 +371,10 @@
       transition: all 0.2s;
     }
 
-    .btn-copy:hover { border-color: var(--accent); color: var(--accent2); }
+    .btn-copy:hover {
+      border-color: var(--accent);
+      color: var(--accent2);
+    }
 
     /* ─── Script blocks ────────────────────────────────────────── */
     .script-blocks {
@@ -335,7 +390,9 @@
       transition: border-color 0.2s;
     }
 
-    .script-block:hover { border-color: var(--border2); }
+    .script-block:hover {
+      border-color: var(--border2);
+    }
 
     .block-label {
       display: flex;
@@ -349,20 +406,41 @@
     }
 
     .block-label .icon {
-      width: 26px; height: 26px;
+      width: 26px;
+      height: 26px;
       border-radius: 7px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 13px;
     }
 
-    .block-hook .block-label { background: rgba(255,92,122,0.12); color: #ff8fa3; }
-    .block-hook .block-label .icon { background: rgba(255,92,122,0.2); }
+    .block-hook .block-label {
+      background: rgba(255, 92, 122, 0.12);
+      color: #ff8fa3;
+    }
 
-    .block-body .block-label { background: rgba(124,92,252,0.12); color: #a78bfa; }
-    .block-body .block-label .icon { background: rgba(124,92,252,0.2); }
+    .block-hook .block-label .icon {
+      background: rgba(255, 92, 122, 0.2);
+    }
 
-    .block-cta .block-label { background: rgba(61,255,160,0.10); color: #3dffa0; }
-    .block-cta .block-label .icon { background: rgba(61,255,160,0.15); }
+    .block-body .block-label {
+      background: rgba(124, 92, 252, 0.12);
+      color: #a78bfa;
+    }
+
+    .block-body .block-label .icon {
+      background: rgba(124, 92, 252, 0.2);
+    }
+
+    .block-cta .block-label {
+      background: rgba(61, 255, 160, 0.10);
+      color: #3dffa0;
+    }
+
+    .block-cta .block-label .icon {
+      background: rgba(61, 255, 160, 0.15);
+    }
 
     .block-content {
       padding: 16px 18px;
@@ -377,14 +455,16 @@
       margin-top: 16px;
       padding: 12px 18px;
       border-radius: var(--radius);
-      background: rgba(124,92,252,0.06);
-      border: 1px solid rgba(124,92,252,0.15);
+      background: rgba(124, 92, 252, 0.06);
+      border: 1px solid rgba(124, 92, 252, 0.15);
       font-size: 0.82rem;
       color: var(--muted);
       line-height: 1.6;
     }
 
-    .style-note strong { color: var(--accent2); }
+    .style-note strong {
+      color: var(--accent2);
+    }
 
     /* ─── Word count bar ───────────────────────────────────────── */
     .word-stats {
@@ -417,12 +497,21 @@
 
     /* ─── Responsive ───────────────────────────────────────────── */
     @media (max-width: 600px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .card { padding: 24px 18px; }
-      .word-stats { flex-direction: column; }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 24px 18px;
+      }
+
+      .word-stats {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="wrapper">
 
@@ -433,7 +522,8 @@
         Script Bench AI
       </div>
       <h1>Script Bench</h1>
-      <p class="subtitle">Turn any idea into a punchy short-form video script.<br/>Hook · Body · CTA — ready in seconds.</p>
+      <p class="subtitle">Turn any idea into a punchy short-form video script.<br />Hook · Body · CTA — ready in
+        seconds.</p>
     </header>
 
     <!-- Input Card -->
@@ -475,7 +565,9 @@
 
           <!-- Topic -->
           <div class="form-group full">
-            <label for="topic">Topic <span style="color:var(--muted);text-transform:none;font-weight:400;letter-spacing:0">(one sentence idea)</span></label>
+            <label for="topic">Topic <span
+                style="color:var(--muted);text-transform:none;font-weight:400;letter-spacing:0">(one sentence
+                idea)</span></label>
             <textarea id="topic" name="topic" rows="2"
               placeholder="e.g. 3 morning habits that doubled my energy in 2 weeks" required></textarea>
           </div>
@@ -532,10 +624,10 @@
         </div>
       </div>
 
-      <!-- Style note -->
+
       <div class="style-note" id="styleNote"></div>
 
-      <!-- Stats -->
+
       <div class="word-stats">
         <div class="stat-chip">
           <div class="num" id="statHook">—</div>
@@ -555,12 +647,12 @@
         </div>
       </div>
 
-    </div><!-- /output-section -->
+    </div>
 
-  </div><!-- /wrapper -->
+  </div>
 
   <script>
-    // Duration pill toggle
+
     const pills = document.querySelectorAll('.pill');
     const durationInput = document.getElementById('duration');
     pills.forEach(p => {
@@ -571,20 +663,20 @@
       });
     });
 
-    // Word counter helper
+
     const wc = str => str.trim().split(/\s+/).filter(Boolean).length;
 
     // Form submit
     document.getElementById('scriptForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const btn     = document.getElementById('generateBtn');
+      const btn = document.getElementById('generateBtn');
       const spinner = document.getElementById('spinner');
       const btnText = document.getElementById('btnText');
       const errBanner = document.getElementById('errorBanner');
 
-      const niche  = document.getElementById('niche').value;
-      const topic  = document.getElementById('topic').value.trim();
+      const niche = document.getElementById('niche').value;
+      const topic = document.getElementById('topic').value.trim();
       const target = parseInt(durationInput.value);
 
       if (!niche || !topic) return;
@@ -613,15 +705,15 @@
         // Populate output
         document.getElementById('hookText').textContent = data.hook;
         document.getElementById('bodyText').textContent = data.body;
-        document.getElementById('ctaText').textContent  = data.cta;
-        document.getElementById('styleNote').innerHTML  =
+        document.getElementById('ctaText').textContent = data.cta;
+        document.getElementById('styleNote').innerHTML =
           `<strong>Style note:</strong> ${data.style_note}`;
 
         // Stats
         const hw = wc(data.hook), bw = wc(data.body), cw = wc(data.cta);
-        document.getElementById('statHook').textContent  = hw;
-        document.getElementById('statBody').textContent  = bw;
-        document.getElementById('statCta').textContent   = cw;
+        document.getElementById('statHook').textContent = hw;
+        document.getElementById('statBody').textContent = bw;
+        document.getElementById('statCta').textContent = cw;
         document.getElementById('statTotal').textContent = hw + bw + cw;
 
         // Provider badge
@@ -641,11 +733,11 @@
       }
     });
 
-    // Copy all
+
     document.getElementById('copyBtn').addEventListener('click', () => {
       const hook = document.getElementById('hookText').textContent;
       const body = document.getElementById('bodyText').textContent;
-      const cta  = document.getElementById('ctaText').textContent;
+      const cta = document.getElementById('ctaText').textContent;
       const full = `🎣 HOOK\n${hook}\n\n📝 BODY\n${body}\n\n🚀 CTA\n${cta}`;
       navigator.clipboard.writeText(full).then(() => {
         const btn = document.getElementById('copyBtn');
@@ -655,4 +747,5 @@
     });
   </script>
 </body>
+
 </html>
