@@ -1,0 +1,658 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Script Bench — AI Video Script Generator</title>
+  <meta name="description" content="Turn any idea into a punchy short-form video script in seconds. Enter your niche, topic, and duration — get a pro-ready hook, body, and CTA." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a0f;
+      --surface:   #13131a;
+      --surface2:  #1c1c27;
+      --border:    rgba(255,255,255,0.08);
+      --border2:   rgba(255,255,255,0.14);
+      --accent:    #7c5cfc;
+      --accent2:   #c77dff;
+      --green:     #3dffa0;
+      --red:       #ff5c7a;
+      --text:      #f0efff;
+      --muted:     #7a7a9a;
+      --radius:    14px;
+      --radius-lg: 22px;
+      --shadow:    0 8px 40px rgba(0,0,0,0.5);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── Animated background ──────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: -1;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 10%, rgba(124,92,252,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 35% at 80% 80%, rgba(199,125,255,0.10) 0%, transparent 60%),
+        var(--bg);
+    }
+
+    /* ─── Layout ───────────────────────────────────────────────── */
+    .wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ─── Header ───────────────────────────────────────────────── */
+    header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--surface2), rgba(124,92,252,0.2));
+      border: 1px solid var(--border2);
+      border-radius: 40px;
+      padding: 8px 20px 8px 14px;
+      margin-bottom: 28px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--accent2);
+      backdrop-filter: blur(12px);
+    }
+
+    .logo .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 1.08;
+      background: linear-gradient(135deg, #ffffff 30%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 14px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 400;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ─── Card ─────────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+    }
+
+    /* ─── Form ─────────────────────────────────────────────────── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+    }
+
+    input, select, textarea {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 13px 16px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      width: 100%;
+    }
+
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124,92,252,0.18);
+    }
+
+    select option { background: var(--surface2); }
+
+    textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+
+    /* ─── Duration pills ───────────────────────────────────────── */
+    .pill-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .pill {
+      flex: 1;
+      padding: 11px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .pill:hover { border-color: var(--accent); color: var(--text); }
+
+    .pill.active {
+      border-color: var(--accent);
+      background: rgba(124,92,252,0.18);
+      color: var(--accent2);
+      box-shadow: 0 0 12px rgba(124,92,252,0.2);
+    }
+
+    /* ─── Generate button ──────────────────────────────────────── */
+    .btn-generate {
+      width: 100%;
+      padding: 16px;
+      margin-top: 8px;
+      border: none;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(124,92,252,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-generate::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent);
+    }
+
+    .btn-generate:hover:not(:disabled) {
+      opacity: 0.92;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 32px rgba(124,92,252,0.5);
+    }
+
+    .btn-generate:active:not(:disabled) { transform: translateY(0); }
+
+    .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-generate .btn-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* ─── Spinner ──────────────────────────────────────────────── */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Error banner ─────────────────────────────────────────── */
+    .error-banner {
+      display: none;
+      background: rgba(255,92,122,0.1);
+      border: 1px solid rgba(255,92,122,0.3);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      color: var(--red);
+      font-size: 0.9rem;
+      margin-top: 16px;
+      line-height: 1.5;
+    }
+
+    /* ─── Output section ───────────────────────────────────────── */
+    .output-section {
+      margin-top: 36px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+
+    .output-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .output-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(61,255,160,0.12);
+      color: var(--green);
+      border: 1px solid rgba(61,255,160,0.25);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-copy {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover { border-color: var(--accent); color: var(--accent2); }
+
+    /* ─── Script blocks ────────────────────────────────────────── */
+    .script-blocks {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .script-block {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s;
+    }
+
+    .script-block:hover { border-color: var(--border2); }
+
+    .block-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .block-label .icon {
+      width: 26px; height: 26px;
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+    }
+
+    .block-hook .block-label { background: rgba(255,92,122,0.12); color: #ff8fa3; }
+    .block-hook .block-label .icon { background: rgba(255,92,122,0.2); }
+
+    .block-body .block-label { background: rgba(124,92,252,0.12); color: #a78bfa; }
+    .block-body .block-label .icon { background: rgba(124,92,252,0.2); }
+
+    .block-cta .block-label { background: rgba(61,255,160,0.10); color: #3dffa0; }
+    .block-cta .block-label .icon { background: rgba(61,255,160,0.15); }
+
+    .block-content {
+      padding: 16px 18px;
+      background: var(--surface2);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      font-weight: 400;
+    }
+
+    /* ─── Style note ───────────────────────────────────────────── */
+    .style-note {
+      margin-top: 16px;
+      padding: 12px 18px;
+      border-radius: var(--radius);
+      background: rgba(124,92,252,0.06);
+      border: 1px solid rgba(124,92,252,0.15);
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .style-note strong { color: var(--accent2); }
+
+    /* ─── Word count bar ───────────────────────────────────────── */
+    .word-stats {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .stat-chip {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      text-align: center;
+    }
+
+    .stat-chip .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent2);
+    }
+
+    .stat-chip .lbl {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ─── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .card { padding: 24px 18px; }
+      .word-stats { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+
+    <!-- Header -->
+    <header>
+      <div class="logo">
+        <span class="dot"></span>
+        Script Bench AI
+      </div>
+      <h1>Script Bench</h1>
+      <p class="subtitle">Turn any idea into a punchy short-form video script.<br/>Hook · Body · CTA — ready in seconds.</p>
+    </header>
+
+    <!-- Input Card -->
+    <div class="card">
+      <form id="scriptForm" autocomplete="off">
+
+        <div class="form-grid">
+          <!-- Niche -->
+          <div class="form-group">
+            <label for="niche">Niche</label>
+            <select id="niche" name="niche" required>
+              <option value="" disabled selected>Select your niche…</option>
+              <option value="fitness">🏋️ Fitness</option>
+              <option value="finance">💰 Finance</option>
+              <option value="beauty">💄 Beauty</option>
+              <option value="tech">💻 Tech</option>
+              <option value="food">🍕 Food</option>
+              <option value="education">📚 Education</option>
+              <option value="travel">✈️ Travel</option>
+              <option value="gaming">🎮 Gaming</option>
+              <option value="mental health">🧠 Mental Health</option>
+              <option value="business">📊 Business</option>
+              <option value="fashion">👗 Fashion</option>
+              <option value="parenting">👶 Parenting</option>
+              <option value="other">✨ Other</option>
+            </select>
+          </div>
+
+          <!-- Duration -->
+          <div class="form-group">
+            <label>Target Duration</label>
+            <div class="pill-group" id="durationGroup">
+              <div class="pill active" data-val="30">30s</div>
+              <div class="pill" data-val="45">45s</div>
+              <div class="pill" data-val="60">60s</div>
+            </div>
+            <input type="hidden" id="duration" value="30" />
+          </div>
+
+          <!-- Topic -->
+          <div class="form-group full">
+            <label for="topic">Topic <span style="color:var(--muted);text-transform:none;font-weight:400;letter-spacing:0">(one sentence idea)</span></label>
+            <textarea id="topic" name="topic" rows="2"
+              placeholder="e.g. 3 morning habits that doubled my energy in 2 weeks" required></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-generate" id="generateBtn">
+          <div class="btn-inner">
+            <div class="spinner" id="spinner"></div>
+            <span id="btnText">⚡ Generate Script</span>
+          </div>
+        </button>
+
+        <div class="error-banner" id="errorBanner"></div>
+      </form>
+    </div>
+
+    <!-- Output Section -->
+    <div class="output-section" id="outputSection">
+
+      <div class="output-header">
+        <div class="output-title">
+          Your Script
+          <span class="badge" id="providerBadge">AI</span>
+        </div>
+        <button class="btn-copy" id="copyBtn">📋 Copy All</button>
+      </div>
+
+      <div class="script-blocks">
+        <!-- Hook -->
+        <div class="script-block block-hook">
+          <div class="block-label">
+            <div class="icon">🎣</div>
+            Hook
+          </div>
+          <div class="block-content" id="hookText"></div>
+        </div>
+
+        <!-- Body -->
+        <div class="script-block block-body">
+          <div class="block-label">
+            <div class="icon">📝</div>
+            Body
+          </div>
+          <div class="block-content" id="bodyText"></div>
+        </div>
+
+        <!-- CTA -->
+        <div class="script-block block-cta">
+          <div class="block-label">
+            <div class="icon">🚀</div>
+            Call to Action
+          </div>
+          <div class="block-content" id="ctaText"></div>
+        </div>
+      </div>
+
+      <!-- Style note -->
+      <div class="style-note" id="styleNote"></div>
+
+      <!-- Stats -->
+      <div class="word-stats">
+        <div class="stat-chip">
+          <div class="num" id="statHook">—</div>
+          <div class="lbl">Hook words</div>
+        </div>
+        <div class="stat-chip">
+          <div class="num" id="statBody">—</div>
+          <div class="lbl">Body words</div>
+        </div>
+        <div class="stat-chip">
+          <div class="num" id="statCta">—</div>
+          <div class="lbl">CTA words</div>
+        </div>
+        <div class="stat-chip">
+          <div class="num" id="statTotal">—</div>
+          <div class="lbl">Total words</div>
+        </div>
+      </div>
+
+    </div><!-- /output-section -->
+
+  </div><!-- /wrapper -->
+
+  <script>
+    // Duration pill toggle
+    const pills = document.querySelectorAll('.pill');
+    const durationInput = document.getElementById('duration');
+    pills.forEach(p => {
+      p.addEventListener('click', () => {
+        pills.forEach(x => x.classList.remove('active'));
+        p.classList.add('active');
+        durationInput.value = p.dataset.val;
+      });
+    });
+
+    // Word counter helper
+    const wc = str => str.trim().split(/\s+/).filter(Boolean).length;
+
+    // Form submit
+    document.getElementById('scriptForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const btn     = document.getElementById('generateBtn');
+      const spinner = document.getElementById('spinner');
+      const btnText = document.getElementById('btnText');
+      const errBanner = document.getElementById('errorBanner');
+
+      const niche  = document.getElementById('niche').value;
+      const topic  = document.getElementById('topic').value.trim();
+      const target = parseInt(durationInput.value);
+
+      if (!niche || !topic) return;
+
+      // UI: loading state
+      btn.disabled = true;
+      spinner.style.display = 'block';
+      btnText.textContent = 'Generating…';
+      errBanner.style.display = 'none';
+      document.getElementById('outputSection').classList.remove('visible');
+
+      try {
+        const resp = await fetch('/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ niche, topic, target_seconds: target }),
+        });
+
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({ detail: resp.statusText }));
+          throw new Error(err.detail || 'Server error');
+        }
+
+        const data = await resp.json();
+
+        // Populate output
+        document.getElementById('hookText').textContent = data.hook;
+        document.getElementById('bodyText').textContent = data.body;
+        document.getElementById('ctaText').textContent  = data.cta;
+        document.getElementById('styleNote').innerHTML  =
+          `<strong>Style note:</strong> ${data.style_note}`;
+
+        // Stats
+        const hw = wc(data.hook), bw = wc(data.body), cw = wc(data.cta);
+        document.getElementById('statHook').textContent  = hw;
+        document.getElementById('statBody').textContent  = bw;
+        document.getElementById('statCta').textContent   = cw;
+        document.getElementById('statTotal').textContent = hw + bw + cw;
+
+        // Provider badge
+        document.getElementById('providerBadge').textContent = data.provider.toUpperCase();
+
+        // Show section with animation
+        document.getElementById('outputSection').classList.add('visible');
+        document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      } catch (err) {
+        errBanner.textContent = '⚠ ' + err.message;
+        errBanner.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        btnText.textContent = '⚡ Generate Script';
+      }
+    });
+
+    // Copy all
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      const hook = document.getElementById('hookText').textContent;
+      const body = document.getElementById('bodyText').textContent;
+      const cta  = document.getElementById('ctaText').textContent;
+      const full = `🎣 HOOK\n${hook}\n\n📝 BODY\n${body}\n\n🚀 CTA\n${cta}`;
+      navigator.clipboard.writeText(full).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => btn.textContent = '📋 Copy All', 2000);
+      });
+    });
+  </script>
+</body>
+</html>
