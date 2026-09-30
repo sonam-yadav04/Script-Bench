@@ -26,7 +26,7 @@ ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-3-5-haiku-20241022")
 OPENAI_MODEL    = os.getenv("OPENAI_MODEL",    "gpt-4o-mini")
 GROQ_MODEL      = os.getenv("GROQ_MODEL",      "qwen/qwen3.8-27b")
 
-# ── FastAPI app ────────────────────────────────────────────────────────────────
+
 app = FastAPI(
     title="Script Bench",
     description="Turn any idea into a short-form video script using AI",
@@ -40,12 +40,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve the frontend
+
 static_dir = Path(__file__).parent / "static"
 app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 
-# ── Request / Response models ──────────────────────────────────────────────────
+
 class ScriptRequest(BaseModel):
     niche: str = Field(..., min_length=1, max_length=100, examples=["fitness"])
     topic: str = Field(..., min_length=5, max_length=300, examples=["3 morning habits that changed my life"])
