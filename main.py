@@ -24,7 +24,7 @@ LLM_API_KEY   = os.getenv("LLM_API_KEY", "")
 
 ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-3-5-haiku-20241022")
 OPENAI_MODEL    = os.getenv("OPENAI_MODEL",    "gpt-4o-mini")
-GROQ_MODEL      = os.getenv("GROQ_MODEL",      "llama3-8b-8192")
+GROQ_MODEL      = os.getenv("GROQ_MODEL",      "qwen/qwen3.8-27b")
 
 # ── FastAPI app ────────────────────────────────────────────────────────────────
 app = FastAPI(
